@@ -3,16 +3,18 @@ import os
 import re  
 import shutil  
 import handler
-  
+
 REJECT_FILETYPE = 'rar,7z,css,js,jpg,jpeg,gif,bmp,png,swf,exe,doc,ipa'#定义爬虫过程中不下载的文件类型  
-URL_LIST = ['www.xidian.edu.cn']
-  
+URL_LIST = ['sh.neusoft.com']
+
 
 def spider(urlList):
+    new_list = []
     for url in urlList:
-        new_list = getinfo(url)
-        handler = handler.handler(new_list)
-        handler.handle()
+        new_list = new_list + getinfo(url)
+    print new_list
+    man = handler.handler(new_list)
+    man.handle()
 
 
 def getOldList(webaddress):
@@ -26,7 +28,7 @@ def getOldList(webaddress):
 
 def getinfo(webaddress):  
     global REJECT_FILETYPE  
-  
+
     url = 'http://'+webaddress+'/'
     print 'Getting>>>>> '+url
 
@@ -56,8 +58,8 @@ def getinfo(webaddress):
     fobj1.close()  
     if os.path.exists(outputfilepath):#将过渡文件output.txt删除  
         os.remove(outputfilepath)#os.remove用于删除文件  
-   return new_list 
-  
+    return new_list 
+
 if __name__=="__main__":  
     spider(URL_LIST)
     print "Well Done."#代码执行完毕之后打印此提示信息
