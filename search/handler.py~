@@ -77,7 +77,6 @@ class handler:
                                 }
                             }
                         }
-                    }
             self.es.indices.create(index=index, body=params)
 
     def pickData(self, url):

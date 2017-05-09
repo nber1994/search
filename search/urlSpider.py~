@@ -13,7 +13,7 @@ def spider(urlList):
     for url in urlList:
         new_list = new_list + getinfo(url)
     print new_list
-    man = handler.handler(new_list, URL_LIST)
+    man = handler.handler(new_list)
     man.handle()
 
 
