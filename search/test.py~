@@ -13,6 +13,5 @@ soup = BeautifulSoup(r.text)
 
 
 
-
 handler = handler.handler(['www.xidian.edu.cn'])
 handler.handle()
