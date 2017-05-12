@@ -1,0 +1,31 @@
+#!/bin/bash
+
+str=(
+    "www.xidian.edu.cn"
+    "job.xidian.edu.cn"
+    "jwc.xidian.edu.cn"
+    "news.xidian.edu.cn"
+    "web.xidian.edu.cn"
+    "ste.xidian.edu.cn"
+    "see.xidian.edu.cn"
+    "cs.xidian.edu.cn"
+    "eme.xidian.edu.cn"
+    "stp.xidian.edu.cn"
+    "math.xidian.edu.cn"
+    "rwxy.xidian.edu.cn"
+    "sfl.xidian.edu.cn"
+    "sc.xidian.edu.cn"
+    "sme.xidian.edu.cn"
+    "life.xidian.edu.cn"
+    "sast.xidian.edu.cn"
+    "sie.xidian.edu.cn"
+    "xiaoli.xidian.edu.cn"
+    "xxc.xidian.edu.cn" )
+
+for ((i=0;i<${#str[*]};i++)); do
+    logpath="/home/elsearch/project/search/search/log/log_${str[i]}"
+    if [ ! -f "$logpath" ]; then  
+        touch "$logpath"  
+    fi 
+    python /home/elsearch/project/search/search/urlSpider.py ${str[i]}>${logpath} 2>&1 & 
+done

@@ -9,22 +9,24 @@ from bs4 import BeautifulSoup
 
 class handler:
     website = ''
-    urllist = []
-    indexList = []
     es = ''
 
-    def __init__(self, url_list, index_list):
-        self.urllist = url_list
-        self.es = Elasticsearch()
-        self.indexList = index_list
+    def __init__(self):
+        self.es = Elasticsearch(['http://39.108.78.17:9200'])
 
-    def handle(self):
+    def patchIndex(self, indexList):
         #将对应文档建立索引        
-        for index in self.indexList:
+        for index in indexList:
             self.setIndex(index)
-        for url in self.urllist:
-            data = self.pickData(url) 
-            self.createIndex(url, data)     
+
+    def handle(self, urllist):
+        for url in urllist:
+            try:
+                data = self.pickData(url) 
+                if data:
+                    self.createIndex(url, data)     
+            except:
+                continue
 
     def setIndex(self, index):
         if not self.es.indices.exists(index):
@@ -40,6 +42,10 @@ class handler:
                                             "type" : "string",
                                             "analyzer" : "ik_max_word"
                                             },
+                                        "py" : {
+                                            "type" : "string",
+                                            "analyzer" : "pinyin"
+                                            },
                                         "en" : {
                                             "type" : "string",
                                             "analyzer" : "english"
@@ -54,6 +60,10 @@ class handler:
                                             "type" : "string",
                                             "analyzer" : "ik_max_word"
                                             },
+                                        "py" : {
+                                            "type" : "string",
+                                            "analyzer" : "pinyin"
+                                            },
                                         "en" : {
                                             "type" : "string",
                                             "analyzer" : "english"
@@ -67,6 +77,10 @@ class handler:
                                         "cn" : {
                                             "type" : "string",
                                             "analyzer" : "ik_max_word"
+                                            },
+                                        "py" : {
+                                            "type" : "string",
+                                            "analyzer" : "pinyin"
                                             },
                                         "en" : {
                                             "type" : "string",
@@ -92,17 +106,24 @@ class handler:
             body = soup.body.getText()
             body = body.replace(' ', '')
             body = body.replace("\n", '')
+            if not title:
+                return False
             data['title'] = title
             data['body'] = body
             data['url'] = url
-        return data
+            return data
+        return False
 
     def createIndex(self, url, payload):
         index, type, id = self.geturl(url)  
         params = json.dumps(payload,ensure_ascii=False) 
         re = self.es.index(index = index, doc_type = type, id = id, body = params)
         print re
-
+    def isEmpty(self, str):
+        if str:
+            return str
+        else:
+            return "-"
     def handleEmpty(self, str):
         if str:
             return str

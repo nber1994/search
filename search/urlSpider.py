@@ -3,18 +3,21 @@ import os
 import re  
 import shutil  
 import handler
+import sys
 
-REJECT_FILETYPE = 'rar,7z,css,js,jpg,jpeg,gif,bmp,png,swf,exe,doc,ipa'#定义爬虫过程中不下载的文件类型  
-URL_LIST = ['sh.neusoft.com']
+REJECT_FILETYPE = 'rar,7z,css,js,jpg,jpeg,gif,bmp,png,swf,exe,doc,ipa,pdf,docx'#定义爬虫过程中不下载的文件类型  
+#URL_LIST = ['sh.neusoft.com']
+#URL_LIST = ['www.xidian.edu.cn','job.xidian.edu.cn','jwc.xidian.edu.cn','news.xidian.edu.cn','web.xidian.edu.cn','bbs.xidian.edu.cn','rs.xidian.edu.cn','ste.xidian.edu.cn']
+URL_LIST = []
 
 
 def spider(urlList):
     new_list = []
+    man = handler.handler()
+    man.patchIndex(URL_LIST)
     for url in urlList:
-        new_list = new_list + getinfo(url)
-    print new_list
-    man = handler.handler(new_list, URL_LIST)
-    man.handle()
+        new_list = getinfo(url)
+        man.handle(new_list)
 
 
 def getOldList(webaddress):
@@ -38,7 +41,7 @@ def getinfo(webaddress):
 
     outputfilepath = os.path.abspath('.')+'/'+webaddress+'.txt'    #在当前文件夹下创建一个过渡性质的文件output.txt  
     fobj = open(outputfilepath,'w+')  
-    command = 'wget -r -m -nv --reject='+REJECT_FILETYPE+' -o '+outputfilepath+' '+url#利用wget命令爬取网站  
+    command = 'wget  -m -nv -e robots=off -t 5 -T 60 --user-agent="Chrome/10.0.648.204"    --no-check-certificate  --reject='+REJECT_FILETYPE+' -o '+outputfilepath+' '+url#利用wget命令爬取网站  
     tmp0 = os.popen(command).readlines()#函数os.popen执行命令并且将运行结果存储在变量tmp0中  
     print >> fobj,tmp0#写入output.txt中  
     allinfo = fobj.read()  
@@ -61,5 +64,7 @@ def getinfo(webaddress):
     return new_list 
 
 if __name__=="__main__":  
+    for i in range(1, len(sys.argv)):
+        URL_LIST.append(sys.argv[i])
     spider(URL_LIST)
     print "Well Done."#代码执行完毕之后打印此提示信息

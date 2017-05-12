@@ -1,0 +1,10 @@
+#!/bin/bash
+
+curl -XGET 'http://39.108.78.17:9200/_count?pretty' -d '
+{
+        "query": {
+                "match_all": {}
+                    }
+                }
+                '
+
