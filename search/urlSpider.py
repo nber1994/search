@@ -41,7 +41,7 @@ def getinfo(webaddress):
 
     outputfilepath = os.path.abspath('.')+'/'+webaddress+'.txt'    #在当前文件夹下创建一个过渡性质的文件output.txt  
     fobj = open(outputfilepath,'w+')  
-    command = 'wget  -m -nv -e robots=off -t 5 -T 60 --user-agent="Chrome/10.0.648.204"    --no-check-certificate  --reject='+REJECT_FILETYPE+' -o '+outputfilepath+' '+url#利用wget命令爬取网站  
+    command = 'wget  -m -Q3072m -nv -e robots=off -t 5 -T 60 --user-agent="Chrome/10.0.648.204"    --no-check-certificate  --reject='+REJECT_FILETYPE+' -o '+outputfilepath+' '+url#利用wget命令爬取网站  
     tmp0 = os.popen(command).readlines()#函数os.popen执行命令并且将运行结果存储在变量tmp0中  
     print >> fobj,tmp0#写入output.txt中  
     allinfo = fobj.read()  

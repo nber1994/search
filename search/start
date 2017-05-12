@@ -1,4 +1,9 @@
 #!/bin/bash
+echo "jtysb123"|sudo -S pkill -9 python 
+echo "jtysb123"|sudo -S pkill -9 wget  
+sleep 3
+echo "jtysb123"|sudo -S pkill -9 python 
+echo "jtysb123"|sudo -S pkill -9 wget  
 
 str=(
     "www.xidian.edu.cn"
@@ -29,3 +34,9 @@ for ((i=0;i<${#str[*]};i++)); do
     fi 
     python /home/elsearch/project/search/search/urlSpider.py ${str[i]}>${logpath} 2>&1 & 
 done
+
+sleep 3h
+
+echo "jtysb123"|sudo -S pkill -9 wget  
+sleep 3
+echo "jtysb123"|sudo -S pkill -9 wget  
